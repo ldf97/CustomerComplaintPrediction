@@ -3,16 +3,38 @@ import streamlit as st
 import pandas as pd
 import pickle
 
+import requests
+import pickle
+from io import BytesIO
+
+# Function to load serialized Python objects with pickle from GitHub
+def load_pickle_from_github(url):
+    response = requests.get(url)
+    response.raise_for_status()  # This will ensure that the request was successful
+    # Load the pickle object from the content of the response
+    return pickle.load(BytesIO(response.content))
+
+# URL to the raw TF-IDF vectorizer and trained model on GitHub
+vectorizer_url = 'https://raw.githubusercontent.com/ldf97/CustomerComplaintPrediction/main/tfidf_vectorizer.pkl'
+model_url = 'https://raw.githubusercontent.com/ldf97/CustomerComplaintPrediction/main/linear_svc_model.pkl'
+
+# Load the TF-IDF vectorizer from GitHub
+tfidf_vectorizer = load_pickle_from_github(vectorizer_url)
+
+# Load the trained model from GitHub
+loaded_model = load_pickle_from_github(model_url)
+
+
 # Function to load serialized Python objects with pickle
-def load_pickle(filename):
-    with open(filename, 'rb') as file:
-        return pickle.load(file)
+#def load_pickle(filename):
+    #with open(filename, 'rb') as file:
+        #return pickle.load(file)
 
 # Load the TF-IDF vectorizer
-tfidf_vectorizer = load_pickle('/kaggle/input/pickle-vectorizer/scikitlearn/picklevectorizer/1/tfidf_vectorizer.pkl')
+#tfidf_vectorizer = load_pickle('/kaggle/input/pickle-vectorizer/scikitlearn/picklevectorizer/1/tfidf_vectorizer.pkl')
 
 # Load the trained model
-loaded_model = load_pickle('/kaggle/input/picklesvm/scikitlearn/picklesvm/1/linear_svc_model.pkl')
+#loaded_model = load_pickle('/kaggle/input/picklesvm/scikitlearn/picklesvm/1/linear_svc_model.pkl')
 
 # Mapping of category numbers to category names
 category_mapping = {
